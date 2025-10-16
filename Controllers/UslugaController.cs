@@ -29,11 +29,12 @@ namespace Web
             {
                 return BadRequest("Услуга ноу");
             }
-            usluga.CreatedAt = DateTimeOffset.Now;
-            usluga.ModifiedAt = DateTimeOffset.Now;
+            usluga.CreatedAt = DateTimeOffset.UtcNow;
+            usluga.ModifiedAt = DateTimeOffset.UtcNow;
             usluga.Status = Usluga.UslugaEnum.Published;
+            _context.Uslugi.Add(usluga);
+            await _context.SaveChangesAsync();
             return Ok(usluga);
         }
-
     }
 }
