@@ -57,6 +57,14 @@ namespace Web
 
             return Ok(target_usluga);
         }
+        [HttpPut]
+        public async Task<IActionResult> UpdateUsluga([FromBody] Usluga usluga)
+        {
+            usluga.ModifiedAt = DateTimeOffset.UtcNow;
+            _context.Uslugi.Update(usluga);
+            await _context.SaveChangesAsync();
+            return Ok(usluga);
+        }
 
     }
 }
