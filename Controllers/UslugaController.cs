@@ -36,5 +36,27 @@ namespace Web
             await _context.SaveChangesAsync();
             return Ok(usluga);
         }
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateStatus(int id)
+        {
+            var target_usluga = await _context.Uslugi.FirstOrDefaultAsync(u => u.Id == id);
+            if (target_usluga == null)
+            {
+                return NotFound();
+            }
+            if (target_usluga.Status == Usluga.UslugaEnum.Published)
+            {
+                target_usluga.Status = Usluga.UslugaEnum.Unpublished;
+            }
+            else if (target_usluga.Status == Usluga.UslugaEnum.Unpublished)
+            {
+                target_usluga.Status = Usluga.UslugaEnum.Published;
+            }
+            target_usluga.ModifiedAt = DateTimeOffset.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return Ok(target_usluga);
+        }
+
     }
 }
