@@ -9,6 +9,6 @@ namespace Web
             
         }
 
-        public DbSet<Usluga> Uslugi;
+        public DbSet<Usluga> Uslugi { get; set; }
     }
 }
