@@ -17,7 +17,7 @@ namespace Web
             _context = context;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllUslugi()
+        public async Task<IActionResult> GetAllUslugi(int? id)
         {
             var list = await _context.Uslugi.ToListAsync();
             return Ok(list);
@@ -57,12 +57,30 @@ namespace Web
 
             return Ok(target_usluga);
         }
-        [HttpPut]
-        public async Task<IActionResult> UpdateUsluga([FromBody] Usluga usluga)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUsluga(int id, [FromBody] Usluga updatedUsluga)
         {
+            var usluga = await _context.Uslugi.FirstOrDefaultAsync(u => u.Id == id);
+            if (usluga == null)
+            {
+                return NotFound();
+            }
+            usluga.Name = updatedUsluga.Name;
+            usluga.Type = updatedUsluga.Type;
+            usluga.Price = updatedUsluga.Price;
             usluga.ModifiedAt = DateTimeOffset.UtcNow;
             _context.Uslugi.Update(usluga);
             await _context.SaveChangesAsync();
+            return Ok();
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUsluga(int id)
+        {
+            var usluga = await _context.Uslugi.FirstOrDefaultAsync(u => u.Id == id);
+            if (usluga == null)
+            {
+                return NotFound();
+            }
             return Ok(usluga);
         }
 
