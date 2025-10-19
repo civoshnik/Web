@@ -83,6 +83,17 @@ namespace Web
             }
             return Ok(usluga);
         }
-
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUsluga(int id)
+        {
+            var target_usluga = await _context.Uslugi.FirstOrDefaultAsync(u => u.Id == id);
+            if (target_usluga == null)
+            {
+                return NotFound();
+            }
+            _context.Uslugi.Remove(target_usluga);
+            await _context.SaveChangesAsync();
+            return Ok(target_usluga);
+        }
     }
 }
