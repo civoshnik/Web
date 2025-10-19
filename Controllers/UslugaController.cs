@@ -17,8 +17,13 @@ namespace Web
             _context = context;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllUslugi(int? id)
+        public async Task<IActionResult> GetAllUslugi(int? id, string? name)
         {
+            if(!string.IsNullOrEmpty(name))
+            {
+                var filtered_spisok = await _context.Uslugi.Where(f => f.Name == name).ToListAsync();
+                return Ok(filtered_spisok);
+            }
             var list = await _context.Uslugi.ToListAsync();
             return Ok(list);
         }
